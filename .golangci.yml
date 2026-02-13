@@ -1,0 +1,46 @@
+version: "2"
+run:
+  tests: true
+linters:
+  enable:
+    - asciicheck
+    - bidichk
+    - gocheckcompilerdirectives
+    - misspell
+    - rowserrcheck
+    - sqlclosecheck
+    - forbidigo
+  disable:
+    - gochecknoglobals
+    - prealloc
+    - wsl
+  exclusions:
+    generated: lax
+    presets:
+      - comments
+      - common-false-positives
+      - legacy
+      - std-error-handling
+    paths:
+      - third_party$
+      - builtin$
+      - examples$
+    rules:
+      - path: cmd
+        linters:
+          - forbidigo
+  settings:
+    forbidigo:
+      forbid:
+        - pattern: ^protojson.*
+          msg: "Use j5codec instead of protojson"
+        - pattern: ^(fmt\.Print(|f|ln))$
+formatters:
+  enable:
+    - gofmt
+  exclusions:
+    generated: lax
+    paths:
+      - third_party$
+      - builtin$
+      - examples$

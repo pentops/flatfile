@@ -1,0 +1,8 @@
+---
+registry:
+  owner: pentops
+  name: flatfile
+
+packages:
+  - label: "Flat File"
+    name: flatfile.v1

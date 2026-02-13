@@ -1,0 +1,105 @@
+syntax = "proto3";
+
+package flatfile.v1;
+
+import "google/protobuf/descriptor.proto";
+
+option go_package = "github.com/pentops/flatfile/gen/flatfile/v1/flatfile_pb";
+
+extend google.protobuf.MessageOptions {
+  Message message = 92592547;
+}
+
+message Message {
+  bool one_based = 1; // If true, the first column is numbered 1
+}
+
+extend google.protobuf.FieldOptions {
+  Field field = 92592548;
+}
+
+message FixedWidth {
+  uint32 offset = 1;
+  uint32 length = 2;
+}
+
+message Field {
+  FixedWidth fixed_width = 1;
+
+  oneof field_type {
+    StringField string = 10;
+    BoolField bool = 11;
+    DateField date = 12;
+    NumberField number = 13;
+  }
+}
+
+message StringField {
+  Trim trim = 1;
+
+  // default is space only, specify as a string of
+  // characters to trim, e.g. " 0" to trim both space and 0s
+  string trim_chars = 2;
+}
+
+enum Trim {
+  TRIM_UNSPECIFIED = 0; // neither, leave the full width
+  TRIM_LEFT = 1;
+  TRIM_RIGHT = 2;
+  TRIM_BOTH = 3;
+}
+
+message BoolField {
+  repeated string true_values = 1;
+  repeated string false_values = 2;
+  MissingIs treat_missing_as = 3;
+}
+
+enum MissingIs {
+  MISSING_IS_UNSPECIFIED = 0; // Meaning missing is the default value
+  MISSING_IS_ERROR = 1; // Throw when the item isn't in one of the lists
+  MISSING_IS_TRUE = 2;
+  MISSING_IS_FALSE = 3;
+}
+
+message NumberField {
+  // Numbers are encoded different ways into the fixed width file.
+  Encoding encoding = 1;
+
+  // Where a field has a decimal place but it is not included
+  // 123 with fixed scale 2 = 1.23
+
+  int32 fixed_scale = 2;
+}
+
+enum Encoding {
+  ENCODING_UNSPECIFIED = 0; // The number is represented as a string
+  ENCODING_PACKED_DECIMAL = 1;
+  ENCODING_OVERPUNCH = 2;
+  ENCODING_BINARY = 3;
+}
+
+extend google.protobuf.EnumValueOptions {
+  Enum enum = 92592549;
+}
+
+message Enum {
+  string key = 1;
+}
+
+message DateField {
+  // When not empty, the field should be a string, on the proto side will use YYYY-MM-DD, this format specifies the wire side.
+  // Date Time Format Parameters:
+  // YYYY 2006
+  // YY 06
+  // MM 01
+  // DD 02
+  string format = 4;
+
+
+
+  // If these are present, treat as empty. Normal vals like empty strings, all
+  // space strings, all 0s etc will be automatically handled, but e.g. some
+  // date fields have "00711111" as the 'empty' value.
+  repeated string zero_vals = 5;
+}
