@@ -68,6 +68,8 @@ github.com/pentops/flowtest v0.0.0-20260213024423-0a79a287d66b h1:UlFYUEbeN+dnuW
 github.com/pentops/flowtest v0.0.0-20260213024423-0a79a287d66b/go.mod h1:vNp8crAKcH0f/sZU9frkmQLUeDsTIgMqV14kQtkAqC0=
 github.com/pentops/golib v0.0.0-20250326060930-8c83d58ddb63 h1:s5qtWT2/s79gy/wm3/bwvKYLK6u2AkW05JiLPqxraP0=
 github.com/pentops/golib v0.0.0-20250326060930-8c83d58ddb63/go.mod h1:I58JIVvL1/nP4CEHGKGbBhvWIEA9mVkGeoviemaqanU=
+github.com/pentops/golib v0.0.0-20260331211253-bd5f18020ba4 h1:vX1gTX8SY1Ym/k0OXO5D+OgaCiO9Z/mZ3lWfnI508DA=
+github.com/pentops/golib v0.0.0-20260331211253-bd5f18020ba4/go.mod h1:bHdtPJd18AmVasFAgScL7jbo5cUvrb+z+hhtODWweDg=
 github.com/pentops/j5 v0.0.0-20260204020332-0f19e0035543 h1:KbBK5VJzPI81OmZ+wP/XZNRTV8QeawyHAKIkVNVNwrg=
 github.com/pentops/j5 v0.0.0-20260204020332-0f19e0035543/go.mod h1:O0q4o26ZmDBUPTFKsH0UaaDesB3f9Em4DZcDAT6oLq0=
 github.com/pentops/log.go v0.0.16 h1:oxCuHSBOBPjfUVSXyOSEEdYUwytysj4T29/7T2FBp9Q=

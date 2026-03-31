@@ -1,10 +1,10 @@
 module github.com/pentops/flatfile
 
-go 1.25.3
+go 1.26
 
 require (
 	github.com/pentops/flowtest v0.0.0-20260213024423-0a79a287d66b
-	github.com/pentops/golib v0.0.0-20250326060930-8c83d58ddb63
+	github.com/pentops/golib v0.0.0-20260331211253-bd5f18020ba4
 	github.com/pentops/j5 v0.0.0-20260204020332-0f19e0035543
 	github.com/shopspring/decimal v1.4.0
 	google.golang.org/protobuf v1.36.11

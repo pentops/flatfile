@@ -10,7 +10,6 @@ import (
 	"time"
 
 	"github.com/pentops/flatfile/gen/flatfile/v1/flatfile_pb"
-	"github.com/pentops/golib/gl"
 	"github.com/pentops/j5/j5types/date_j5t"
 	"github.com/pentops/j5/j5types/decimal_j5t"
 	"github.com/shopspring/decimal"
@@ -196,7 +195,7 @@ func (r *Reader) readString(tc *flatfile_pb.Field) (*protoreflect.Value, error) 
 	}
 	strVal = trimString(strVal, tc)
 
-	return gl.Ptr(protoreflect.ValueOfString(strVal)), nil
+	return new(protoreflect.ValueOfString(strVal)), nil
 }
 
 func (r *Reader) readStringValue(tc *flatfile_pb.Field) (*protoreflect.Value, error) {
@@ -208,7 +207,7 @@ func (r *Reader) readStringValue(tc *flatfile_pb.Field) (*protoreflect.Value, er
 	if strVal == "" {
 		return nil, nil
 	}
-	return gl.Ptr(protoreflect.ValueOfMessage((&wrapperspb.StringValue{Value: strVal}).ProtoReflect())), nil
+	return new(protoreflect.ValueOfMessage((&wrapperspb.StringValue{Value: strVal}).ProtoReflect())), nil
 }
 
 var (
@@ -232,17 +231,17 @@ func (r *Reader) readBoolValue(tc *flatfile_pb.Field) (*protoreflect.Value, erro
 	}
 
 	if slices.Contains(boolField.TrueValues, strVal) {
-		return gl.Ptr(protoreflect.ValueOf(true)), nil
+		return new(protoreflect.ValueOf(true)), nil
 	}
 	if slices.Contains(boolField.FalseValues, strVal) {
-		return gl.Ptr(protoreflect.ValueOf(false)), nil
+		return new(protoreflect.ValueOf(false)), nil
 	}
 
 	switch boolField.TreatMissingAs {
 	case flatfile_pb.MissingIs_MISSING_IS_UNSPECIFIED, flatfile_pb.MissingIs_MISSING_IS_FALSE:
-		return gl.Ptr(protoreflect.ValueOfBool(false)), nil
+		return new(protoreflect.ValueOfBool(false)), nil
 	case flatfile_pb.MissingIs_MISSING_IS_TRUE:
-		return gl.Ptr(protoreflect.ValueOfBool(true)), nil
+		return new(protoreflect.ValueOfBool(true)), nil
 	case flatfile_pb.MissingIs_MISSING_IS_ERROR:
 		return nil, ErrMissingBool
 	default:
@@ -263,7 +262,7 @@ func (r *Reader) readDecimal(tc *flatfile_pb.Field) (*protoreflect.Value, error)
 		return nil, fmt.Errorf("invalid decimal value: %q", stringVal)
 	}
 	msgVal := decimal_j5t.FromShop(val)
-	return gl.Ptr(protoreflect.ValueOfMessage(msgVal.ProtoReflect())), nil
+	return new(protoreflect.ValueOfMessage(msgVal.ProtoReflect())), nil
 }
 
 var reNumbers = regexp.MustCompile(`[MDY]`)
@@ -316,7 +315,7 @@ func (r *Reader) readDate(tc *flatfile_pb.Field) (*protoreflect.Value, error) {
 		Month: int32(mm),
 		Day:   int32(dd),
 	}
-	return gl.Ptr(protoreflect.ValueOfMessage(dateVal.ProtoReflect())), nil
+	return new(protoreflect.ValueOfMessage(dateVal.ProtoReflect())), nil
 }
 
 func (r *Reader) readEnum(tc *flatfile_pb.Field, enum protoreflect.EnumDescriptor) (*protoreflect.Value, error) {
@@ -334,7 +333,7 @@ func (r *Reader) readEnum(tc *flatfile_pb.Field, enum protoreflect.EnumDescripto
 		}
 
 		if strings.TrimSpace(tc.Key) == stringVal {
-			return gl.Ptr(protoreflect.ValueOfEnum(valueDesc.Number())), nil
+			return new(protoreflect.ValueOfEnum(valueDesc.Number())), nil
 		}
 	}
 
@@ -479,7 +478,7 @@ func (r *Reader) readUint32(tc *flatfile_pb.Field) (*protoreflect.Value, error) 
 			return nil, err
 		}
 		val := byteVal[0]
-		return gl.Ptr(protoreflect.ValueOfUint32(uint32(val))), nil
+		return new(protoreflect.ValueOfUint32(uint32(val))), nil
 	}
 
 	val, isSet, err := r.unsignedStringNumber(tc, 32)
@@ -489,7 +488,7 @@ func (r *Reader) readUint32(tc *flatfile_pb.Field) (*protoreflect.Value, error) 
 	if !isSet {
 		return nil, nil
 	}
-	return gl.Ptr(protoreflect.ValueOfUint32(uint32(val))), nil
+	return new(protoreflect.ValueOfUint32(uint32(val))), nil
 }
 
 func (r *Reader) readUint64(tc *flatfile_pb.Field) (*protoreflect.Value, error) {
@@ -500,7 +499,7 @@ func (r *Reader) readUint64(tc *flatfile_pb.Field) (*protoreflect.Value, error) 
 			return nil, err
 		}
 		val := byteVal[0]
-		return gl.Ptr(protoreflect.ValueOfUint64(uint64(val))), nil
+		return new(protoreflect.ValueOfUint64(uint64(val))), nil
 	}
 
 	val, isSet, err := r.unsignedStringNumber(tc, 64)
@@ -510,7 +509,7 @@ func (r *Reader) readUint64(tc *flatfile_pb.Field) (*protoreflect.Value, error) 
 	if !isSet {
 		return nil, nil
 	}
-	return gl.Ptr(protoreflect.ValueOfUint64(val)), nil
+	return new(protoreflect.ValueOfUint64(val)), nil
 }
 
 func (r *Reader) readInt32(tc *flatfile_pb.Field) (*protoreflect.Value, error) {
@@ -522,7 +521,7 @@ func (r *Reader) readInt32(tc *flatfile_pb.Field) (*protoreflect.Value, error) {
 		}
 		val := byteVal[0]
 		signedVal := int32(val)
-		return gl.Ptr(protoreflect.ValueOfInt32(signedVal)), nil
+		return new(protoreflect.ValueOfInt32(signedVal)), nil
 	}
 
 	val, isSet, err := r.signedStringNumber(tc, 32)
@@ -532,7 +531,7 @@ func (r *Reader) readInt32(tc *flatfile_pb.Field) (*protoreflect.Value, error) {
 	if !isSet {
 		return nil, nil
 	}
-	return gl.Ptr(protoreflect.ValueOfInt32(int32(val))), nil
+	return new(protoreflect.ValueOfInt32(int32(val))), nil
 }
 
 func (r *Reader) readInt64(tc *flatfile_pb.Field) (*protoreflect.Value, error) {
@@ -544,7 +543,7 @@ func (r *Reader) readInt64(tc *flatfile_pb.Field) (*protoreflect.Value, error) {
 		}
 		val := byteVal[0]
 		signedVal := int64(val)
-		return gl.Ptr(protoreflect.ValueOfInt64(signedVal)), nil
+		return new(protoreflect.ValueOfInt64(signedVal)), nil
 	}
 
 	val, isSet, err := r.signedStringNumber(tc, 64)
@@ -554,5 +553,5 @@ func (r *Reader) readInt64(tc *flatfile_pb.Field) (*protoreflect.Value, error) {
 	if !isSet {
 		return nil, nil
 	}
-	return gl.Ptr(protoreflect.ValueOfInt64(val)), nil
+	return new(protoreflect.ValueOfInt64(val)), nil
 }
